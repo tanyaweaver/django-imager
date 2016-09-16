@@ -9,20 +9,29 @@ from django.utils.encoding import python_2_unicode_compatible
 
 
 @python_2_unicode_compatible
-class UserProfile(models.Model):
+class ImagerProfile(models.Model):
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
-        related_name="profile"
+        related_name="profile",
+        on_delete=models.CASCADE
     )
-    camera_type = models.CharField(max_length=200)
-    address = models.CharField(max_length=200)
-    website = models.CharField(max_length=200)
-    type_of_photography = models.CharField(max_length=200)
-    social_media = models.CharField(max_length=200)
+    camera_type = models.CharField(max_length=200, blank=True)
+    address = models.CharField(max_length=200, blank=True)
+    website = models.CharField(max_length=200, blank=True)
+    type_of_photography = models.CharField(max_length=200, blank=True)
+    social_media = models.CharField(max_length=200, blank=True)
 
-    def active():
-        return User.objects.filter(is_active=True)
+    def __str__(self):
+        return 'ImagerProfile for {}'.format(self.user)
+
+    @property
+    def is_active(self):
+        return self.user.is_active
+
+    @property
+    def active(self):
+        return ImagerProfile.objects.filter(user__is_active=True)
 
     # @receiver(post_save, sender=User)
     # def update_user_profile(sender, instance):
