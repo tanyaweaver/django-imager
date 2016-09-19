@@ -2,8 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -33,7 +33,8 @@ class ImagerProfile(models.Model):
     def active(self):
         return ImagerProfile.objects.filter(user__is_active=True)
 
-    # @receiver(post_save, sender=User)
-    # def update_user_profile(sender, instance):
-    #     instance.profile = UserProfile()
-    #     instance.profile.save()
+    @receiver(post_save, sender=User)
+    def update_user_profile(sender, **kwargs):
+        ImagerProfile(
+            user=kwargs['instance']
+        ).save()
