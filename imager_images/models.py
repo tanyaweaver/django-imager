@@ -2,17 +2,17 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+form imager_profile import ImagerProfile
+
 
 # Create your models here.
 
 
 @python_2_unicode_compatible
 class Photo(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        related_name="photo",
+    profile = models.ForeignKey(
+        ImagerProfile,
+        related_name="photos",
         on_delete=models.CASCADE
     )
     title = models.CharField(max_length=20, blank=True)
@@ -41,10 +41,3 @@ class Photo(models.Model):
 
     def __str__(self):
         return 'Photo for {}'.format(self.user)
-
-    @receiver(post_save, sender=User)
-    def update_imager_images(sender, **kwargs):
-        if not Photo(user=kwargs['instance']):
-            Photo(
-                user=kwargs['instance']
-            ).save()
