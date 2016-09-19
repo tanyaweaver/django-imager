@@ -1,14 +1,13 @@
 from django.db import models
-from django.conf import settings
-from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
-from imager_profile import ImagerProfile
+from django.contrib.auth.models import User
+# from imager_profile.models import ImagerProfile
 
 
 @python_2_unicode_compatible
 class Photo(models.Model):
-    profile = models.ForeignKey(
-        ImagerProfile,
+    user = models.ForeignKey(
+        User,
         related_name="photos",
         on_delete=models.CASCADE
     )
@@ -42,8 +41,8 @@ class Photo(models.Model):
 
 @python_2_unicode_compatible
 class Album(models.Model):
-    profile = models.ForeignKey(
-        ImagerProfile,
+    user = models.ForeignKey(
+        User,
         related_name="albums",
         on_delete=models.CASCADE
     )
