@@ -34,7 +34,8 @@ class ImagerProfile(models.Model):
         return ImagerProfile.objects.filter(user__is_active=True)
 
     @receiver(post_save, sender=User)
-    def update_user_profile(sender, **kwargs):
-        ImagerProfile(
-            user=kwargs['instance']
-        ).save()
+    def update_imager_profile(sender, **kwargs):
+        if not ImagerProfile(user=kwargs['instance']):
+            ImagerProfile(
+                user=kwargs['instance']
+            ).save()

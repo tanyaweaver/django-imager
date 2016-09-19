@@ -19,7 +19,7 @@ class Photo(models.Model):
     description = models.CharField(max_length=200, blank=True)
     date_uploaded = models.DateField(auto_now_add=True)
     data_modified = models.DateField(auto_now=True)
-    date_published = models.DateField()
+    date_published = models.DateField(auto_now=True)
     private = 'pr'
     shared = 'sh'
     public = 'pu'
@@ -38,3 +38,13 @@ class Photo(models.Model):
         blank=True,
         null=True
     )
+
+    def __str__(self):
+        return 'Photo for {}'.format(self.user)
+
+    @receiver(post_save, sender=User)
+    def update_imager_images(sender, **kwargs):
+        if not Photo(user=kwargs['instance']):
+            Photo(
+                user=kwargs['instance']
+            ).save()
