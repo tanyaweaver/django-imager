@@ -11,6 +11,7 @@ class Photo(models.Model):
         related_name="photos",
         on_delete=models.CASCADE
     )
+    is_cover = models.BooleanField(default=False)
     title = models.CharField(max_length=20, blank=True)
     description = models.CharField(max_length=200, blank=True)
     date_uploaded = models.DateField(auto_now_add=True)
@@ -46,11 +47,10 @@ class Album(models.Model):
         related_name="albums",
         on_delete=models.CASCADE
     )
-    # photos = models.ManyToManyField(
-    #     "Photo",
-    #     related_name='albums',
-    #     on_delete=models.CASCADE
-    # )
+    photos = models.ManyToManyField(
+        Photo,
+        related_name='albums',
+    )
     title = models.CharField(max_length=20, blank=True)
     description = models.CharField(max_length=200, blank=True)
     date_uploaded = models.DateField(auto_now_add=True)
