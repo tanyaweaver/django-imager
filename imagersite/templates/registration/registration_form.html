@@ -1,0 +1,15 @@
+{% extends "imagersite/base.html" %}
+{% block body %}
+<main id="register" class="container-fluid portal-main">
+  <section class="row">
+
+    <form action="" method="post" class="form-signin">{% csrf_token %}
+      <input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus>
+      <input type="text" name="email" id="email" class="form-control" placeholder="email@email.com" required autofocus>
+      <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+
+      <button class="btn btn-lg btn-success btn-block" type="submit">SignUp</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

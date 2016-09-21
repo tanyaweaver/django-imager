@@ -19,10 +19,15 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from imagersite.views import home_view
 import django.contrib.auth.views as dj
+import registration
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', home_view, name='homepage'),
     url(r'^login$', dj.login, name='login'),
-    url(r'^logout$', dj.logout, name='logout')
+    url(r'^logout$', dj.logout, name='logout'),
+    url(r'^signup/',
+        include('registration.backends.hmac.urls'),
+        name='signup'),
+    # url(r'^signup/', include('registration.backends.hmac.urls'), name='registration_complete')
 ]
