@@ -24,10 +24,7 @@ import registration
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', home_view, name='homepage'),
-    url(r'^login$', dj.login, name='login'),
-    url(r'^logout$', dj.logout, name='logout'),
-    url(r'^signup/',
+    url(r'^accounts/',
         include('registration.backends.hmac.urls'),
-        name='signup'),
-    # url(r'^signup/', include('registration.backends.hmac.urls'), name='registration_complete')
+        name='accounts'),
 ]
