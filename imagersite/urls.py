@@ -18,8 +18,11 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from imagersite.views import home_view
+import django.contrib.auth.views as dj
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', home_view, name='homepage')
+    url(r'^$', home_view, name='homepage'),
+    url(r'^login$', dj.login, name='login'),
+    url(r'^logout$', dj.logout, name='logout')
 ]

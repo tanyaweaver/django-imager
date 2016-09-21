@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>ImagerSite</title>
-</head>
-<body>
+{% extends "imagersite/base.html" %}
+{% block body %}
   <h1>Welcome To Our Site!</h1>
   <div>
-    <button>Login</button>
-    <button>SignUp</button>
+    <button class="btn btn-primary"><a href="/login">Login</a></button>
+    <button class="btn btn-primary"><a href="/signup">SignUp</a></button>
   </div>
 </body>
 <footer>
 </footer>
 </html>
+{% endblock %}
