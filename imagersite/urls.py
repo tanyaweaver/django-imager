@@ -17,14 +17,17 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
-from imagersite.views import home_view
+from imagersite.views import HomeView
 import django.contrib.auth.views as dj
 import registration
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', home_view, name='homepage'),
+    url(r'^$', HomeView.as_view(), name='homepage'),
     url(r'^accounts/',
         include('registration.backends.hmac.urls'),
-        name='accounts'),
-]
+        name='accounts')]
+
+
+if settings.DEBUG:
+    urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
