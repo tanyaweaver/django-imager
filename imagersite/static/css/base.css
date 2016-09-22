@@ -2,6 +2,12 @@ input {
   margin: 1em;
 }
 
- #home button{
-  color: white;
+.tree {
+  margin: 1em;
+  width: 24em;
+  height: 24em;
+}
+
+#home {
+text-align: center;
 }

@@ -1,7 +1,10 @@
 {% extends "imagersite/base.html" %}
 {% block body %}
 <div id="home">
-  <h1>Welcome To Our Site!</h1>
+  <h1>Welcome to <strong>Image Library</strong></h1>
+  <h2>Share your photos with the world</h2>
+  <h2>Create an account or log in below</h2>
+  <img class="tree" src="{{ cover_path }}">
   <div>
     <a href="/accounts/login/">
       <input type="button" value="Login" class="btn btn-primary"></input>
@@ -11,6 +14,5 @@
     </a>
   </div>
 
-  <img class="tree" src="{{ cover_path }}">
 </div>
 {% endblock %}

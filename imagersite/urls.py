@@ -20,14 +20,34 @@ from django.contrib import admin
 from imagersite.views import HomeView
 import django.contrib.auth.views as dj
 import registration
+from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
+from imager_profile.models import ImagerProfile
+# from imagersite.views import home_view
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', HomeView.as_view(), name='homepage'),
+    # url(r'^$', home_view, name='homepage'),
+    url(r'^$', HomeView.as_view(
+        template_name='imagersite/home.html'
+    ), name='homepage'),
     url(r'^accounts/',
         include('registration.backends.hmac.urls'),
-        name='accounts')]
-
+        name='accounts'),
+    # url(r'^$',
+    #     TemplateView.as_view(template_name='imager_profile/profile.html'),
+    #     name='personal_profile'
+    #     ),
+    # url(r'(?P<username>[a-f\0-9-]+)$',
+    #     DetailView.as_view(
+    #         template_name='imager_profile/public_profile',
+    #         model=ImagerProfile,
+    #         pk_url_kwargs=user_id,
+    #         context_object_name='imager_profile'
+    #     ),
+    #     name='public_profile'
+    #     )
+    ]
 
 if settings.DEBUG:
-    urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
