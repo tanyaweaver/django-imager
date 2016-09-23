@@ -84,7 +84,6 @@ DATABASES = {
     'default': dj_database_url.config(
         default='postgres://{}@localhost:5432/imager_site'
         .format(os.environ.get('USER')))
-}
 
 # DATABASES = {
 #     'default': {
