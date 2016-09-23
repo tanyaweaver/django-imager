@@ -1,6 +1,9 @@
 #!/usr/bin/env python
+from envious import load_env
 import os
 import sys
+
+load_env()
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "imagersite.settings")
