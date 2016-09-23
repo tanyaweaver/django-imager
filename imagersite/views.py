@@ -11,7 +11,6 @@ class HomeView(TemplateView):
     template_name = 'imagersite/home.html'
 
     def get_context_data(self, **kwargs):
-        import pdb; pdb.set_trace()
         context = super(HomeView, self).get_context_data(**kwargs)
         try:
             photo = Photo.objects.all().order_by('?').first().photo.url
