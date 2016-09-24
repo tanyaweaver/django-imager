@@ -33,7 +33,7 @@ urlpatterns = [
     ), name='homepage'),
     url(r'^accounts/',
         include('registration.backends.hmac.urls'),
-        name='accounts'),
+        name='registration_login'),
     # url(r'^$',
     #     TemplateView.as_view(template_name='imager_profile/profile.html'),
     #     name='personal_profile'
