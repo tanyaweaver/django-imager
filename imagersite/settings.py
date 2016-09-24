@@ -90,6 +90,13 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgres://{}@localhost:5432/imager_site'
+#         .format(os.environ.get('USER')))
+# }
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
