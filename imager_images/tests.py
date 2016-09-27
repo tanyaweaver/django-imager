@@ -12,13 +12,13 @@ class PhotoTest(TestCase):
         self.user = User(username='test')
         self.user.set_password('test')
         self.user.save()
-        self.photo = Photo(user=self.user)
-        self.photo.save()
+        self.photos = Photo(user=self.user)
+        self.photos.save()
 
     def tearDown(self):
         """Delete fake user/profile after each test."""
         self.user.delete()
-        self.photo.delete()
+        self.photos.delete()
 
     def test_user_exists(self):
         """Prove the user exists."""
@@ -26,8 +26,8 @@ class PhotoTest(TestCase):
 
     def test_photo_exists(self):
         """Prove that the user has a profile."""
-        self.assertTrue(self.user.photo is not None)
+        self.assertTrue(self.user.photos is not None)
 
     def test_profile_is_attached_to_right_user(self):
         """Prove that the profileis attached to the right user."""
-        self.assertEqual(self.photo.user.username, 'test')
+        self.assertEqual(self.photos.user.username, 'test')

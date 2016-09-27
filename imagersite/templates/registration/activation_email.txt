@@ -1,0 +1,3 @@
+registration/activation_email.txt
+Click on the link to complete activation
+http://{{ site }}{% url 'registration_activate' activation_key=activation_key %}

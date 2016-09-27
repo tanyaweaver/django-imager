@@ -12,13 +12,11 @@ class ImagerProfileTest(TestCase):
         self.user = User(username='test')
         self.user.set_password('test')
         self.user.save()
-        self.profile = ImagerProfile(user=self.user)
-        self.profile.save()
 
     def tearDown(self):
         """Delete fake user/profile after each test."""
         self.user.delete()
-        self.profile.delete()
+        self.user.profile.delete()
 
     def test_user_exists(self):
         """Prove the user exists."""
@@ -34,4 +32,4 @@ class ImagerProfileTest(TestCase):
 
     def test_profile_is_attached_to_right_user(self):
         """Prove that the profileis attached to the right user."""
-        self.assertEqual(self.profile.user.username, 'test')
+        self.assertEqual(self.user.profile.user.username, 'test')
