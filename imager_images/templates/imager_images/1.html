@@ -1,0 +1,20 @@
+{% extends "imagersite/base.html" %}
+{% block body %}
+<div class="meta">
+  <h2>Albums</h2>
+    <ul>
+      {% for album in albums %}
+      <li class="albums">
+        <h4>{{ album.title }}</h4>
+          {% if album.cover %}
+            <img class="thumb" src="{{ album.cover.photo.url }}">
+          {% else %}
+           {% load static %}
+            <img class="thumb" src="{% static 'images/tanyastree.jpeg' %}">
+          {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+
+{% endblock %}

@@ -12,7 +12,7 @@ input {
 text-align: center;
 }
 
-#thumb {
+.thumb {
  max-width: 80px;
  max-height: 80px;
  display: block;
