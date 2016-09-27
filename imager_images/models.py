@@ -72,7 +72,7 @@ class Album(models.Model):
 
     @property
     def cover(self):
-        return self.objects.filter(photo__is_cover=True)
+        return self.photos.filter(is_cover=True).first()
 
     def __str__(self):
         return 'Album for {}'.format(self.user)

@@ -1,13 +1,53 @@
 input {
-  margin: 1em;
+ margin: 1em;
 }
 
 .tree {
-  margin: 1em;
-  width: 24em;
-  height: 24em;
+ margin: 1em;
+ width: 24em;
+ height: 24em;
 }
 
 #home {
 text-align: center;
+}
+
+#thumb {
+ max-width: 80px;
+ max-height: 80px;
+ display: block;
+}
+
+.photos {
+ display: inline-block;
+ margin: 20px;
+}
+
+.albums {
+ display: inline-block;
+ margin: 20px;
+}
+
+.photo-view {
+ max-width: 500px;
+ max-height: 500px;
+ display: block;
+ margin: 0 auto;
+}
+
+.msg {
+ margin-top: 50px;
+}
+
+.nav-link {
+ margin-right: 50px;
+}
+
+#nav {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.meta {
+  text-align: center;
 }

@@ -27,8 +27,8 @@ class ImagerProfile(models.Model):
     def is_active(self):
         return self.user.is_active
 
-    @property
-    def active(self):
+    @classmethod
+    def active(cls):
         return ImagerProfile.objects.filter(user__is_active=True)
 
 
