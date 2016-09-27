@@ -9,7 +9,6 @@ class ImagerProfileTest(TestCase):
     """Create test class for ImagerProfile model."""
     def setUp(self):
         """Set up a fake user and profile."""
-        # import pdb; pdb.set_trace()
         self.user = User(username='test')
         self.user.set_password('test')
         self.user.save()
