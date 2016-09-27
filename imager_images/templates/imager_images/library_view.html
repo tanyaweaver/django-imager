@@ -1,0 +1,35 @@
+{% extends "imagersite/base.html" %}
+{% block body %}
+<div class="meta">
+  
+    <h4>Albums</h4>
+      <ul>
+        {% for album in user.albums.all %}
+          <li class="albums">
+            {{ album.title}}
+            <a href="{% url 'albums' album.pk %}">
+              {% if album.cover %}
+                  <img id='thumb' src ="{{album.cover.photo.url}}">
+              {% else %}
+                  {% load static %}
+                  <img id='thumb' src ="{% static 'images/tanyastree.jpeg' %}">
+              {% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+    <h4>Photos</h4>
+    <ul>
+      {% for photo in user.photos.all %}
+        <li class="photos">
+          {{ photo.title}}
+          <a href="{% url 'photos' photo.pk %}">
+            <img id='thumb' src ="{{ photo.photo.url }}">
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+</div>
+{% endblock %}
