@@ -105,7 +105,7 @@ class UserFactory(factory.Factory):
         model = User
 
 
-class LoginTest(TestCase):
+class AuthTest(TestCase):
     """Create Login test case."""
     def setUp(self):
         """Set up response for login tests."""
@@ -114,19 +114,40 @@ class LoginTest(TestCase):
         self.user.set_password('sldkfje837&')
         self.user.save()
 
+        self.login_response = self.client.post(reverse('auth_login'), {
+            "username": 'bob', "password": "sldkfje837&"})
+        self.home_login_response = self.client.get(reverse('homepage'))
+        self.logout_response = self.client.get(reverse('auth_logout'))
+        self.home_logout_response = self.client.get(reverse('homepage'))
+
     def tearDown(self):
         """Tear down set up."""
         pass
 
     def test_login_successful_redirection(self):
         """Test successful login redirection."""
-        self.response = self.client.get(reverse('homepage'))
-        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(self.login_response.status_code, 302)
 
     def test_auth_user_homepage_view(self):
         """Test homepage has 'welcome username'."""
-        self.response = self.client.post(reverse('auth_login'), {
-            "username": 'bob', "password": "sldkfje837&"})
-        # self.response = self.client.get(reverse('homepage'))
-        # import pdb; pdb.set_trace()
-        self.assertEqual(self.response.status_code, 302)
+        self.assertContains(self.home_login_response, "Welcome, bob")
+
+    def test_logout_button_exists(self):
+        """Test auth user has logout button on homepage and right url."""
+        logout_url = reverse('auth_logout')
+        expected = 'href="{}"'.format(logout_url)
+        self.assertContains(self.home_login_response, expected)
+
+    def test_logout_succesful_redirection(self):
+        """Test successful logout redirection."""
+        self.assertEqual(self.logout_response.status_code, 302)
+
+    def test_unauth_user_homepage_view(self):
+        """Test homepage has no 'Welcome, username' if unauth."""
+        self.assertNotContains(self.home_logout_response, "Welcome, bob")
+
+    def test_no_logout_button_if_unauth(self):
+        """Test auth user has no logout button on homepage if unauth."""
+        logout_url = reverse('auth_logout')
+        expected = 'href="{}"'.format(logout_url)
+        self.assertNotContains(self.home_logout_response, expected)
