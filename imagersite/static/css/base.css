@@ -51,3 +51,9 @@ text-align: center;
 .meta {
   text-align: center;
 }
+
+.profile {
+  text-align: left;
+  max-width: 40%;
+  margin: 0 auto;
+}

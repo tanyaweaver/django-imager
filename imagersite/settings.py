@@ -61,6 +61,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             (os.path.join(BASE_DIR, 'imagersite', 'templates')),
+            (os.path.join(BASE_DIR, 'imager_profile', 'templates')),
+            (os.path.join(BASE_DIR, 'imager_images', 'templates')),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

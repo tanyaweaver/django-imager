@@ -1,0 +1,18 @@
+{% extends "imagersite/base.html" %}
+{% block body %}
+<div class="meta">
+   <h3> {{ user.username }}'s Profile</h4>
+     <div class="profile">
+       <p><strong>Camera Type:</strong> {{ user.profile.camera_type}}</p>
+       <p><strong>Type of Photography:</strong> {{ user.profile.type_of_photography}}</p>
+       <p><strong>Personal Website:</strong> {{ user.profile.website}}</p>
+       <p><strong>Social Media:</strong> {{ user.profile.social_media}}</p>
+       <p><strong>You have uploaded</strong> {{ user.photos.count}} photos</p>
+       <p><strong>You have</strong> {{ user.albums.count}} albums</p>
+    </div>
+   <div class="msg">
+     <h4>Go to you library to view and edit your photos and albums.</h4>
+   </div>
+
+</div>
+{% endblock %}
