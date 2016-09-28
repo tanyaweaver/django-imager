@@ -25,9 +25,9 @@
       {% for photo in photos %}
       <li class="photos">
         <h4>{{ photo.title }}</h4>
-        <a href="{% url 'photos' photo.pk %}">
-          <img class="thumb" src="{{ photo.photo.url }}">
-        </a>
+          <a href="{% url 'photos' photo.pk %}">
+            <img class="thumb" src="{{ photo.photo.url }}">
+          </a>
       </li>
       {% endfor %}
     </ul>

@@ -116,7 +116,7 @@ class AuthTest(TestCase):
 
         self.login_response = self.client.post(reverse('auth_login'), {
             "username": 'bob', "password": "sldkfje837&"})
-        self.home_login_response = self.client.get(reverse('homepage'))
+        self.profile_login_response = self.client.get(reverse('profile_view'))
         self.logout_response = self.client.get(reverse('auth_logout'))
         self.home_logout_response = self.client.get(reverse('homepage'))
 
@@ -128,15 +128,27 @@ class AuthTest(TestCase):
         """Test successful login redirection."""
         self.assertEqual(self.login_response.status_code, 302)
 
-    def test_auth_user_homepage_view(self):
-        """Test homepage has 'welcome username'."""
-        self.assertContains(self.home_login_response, "Welcome, bob")
+    def test_auth_user_profile_page_view(self):
+        """Test profile page has 'welcome username'."""
+        self.assertContains(self.profile_login_response, "Welcome, bob")
+
+    def test_welcome_username_linked_to_profile_page(self):
+        """Test that 'welcome, <username>' links to profile page."""
+        profile_url = reverse('profile_view')
+        expected = 'href="{}"'.format(profile_url)
+        self.assertContains(self.profile_login_response, expected)
 
     def test_logout_button_exists(self):
-        """Test auth user has logout button on homepage and right url."""
+        """Test auth user has logout button on profile page and right url."""
         logout_url = reverse('auth_logout')
         expected = 'href="{}"'.format(logout_url)
-        self.assertContains(self.home_login_response, expected)
+        self.assertContains(self.profile_login_response, expected)
+
+    def test_library_button_exists(self):
+        """Test auth user has library button on profile page and right url."""
+        library_url = reverse('library')
+        expected = 'href="{}"'.format(library_url)
+        self.assertContains(self.profile_login_response, expected)
 
     def test_logout_succesful_redirection(self):
         """Test successful logout redirection."""
