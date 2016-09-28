@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.core import mail
 from django.contrib.auth.models import User
 import factory
-from imager_profile.models import ImagerProfile
+from imager_images.models import Photo, Album
 
 
 class HomePageTestCase(TestCase):
@@ -105,6 +105,16 @@ class UserFactory(factory.Factory):
         model = User
 
 
+class PhotoFactory(factory.Factory):
+    class Meta:
+        model = Photo
+
+
+class AlbumFactory(factory.Factory):
+    class Meta:
+        model = Album
+
+
 class AuthTest(TestCase):
     """Create Login test case."""
     def setUp(self):
@@ -113,10 +123,11 @@ class AuthTest(TestCase):
         self.user.username = 'bob'
         self.user.set_password('sldkfje837&')
         self.user.save()
-
-        self.login_response = self.client.post(reverse('auth_login'), {
-            "username": 'bob', "password": "sldkfje837&"})
-        self.home_login_response = self.client.get(reverse('homepage'))
+        self.login_response = self.client.post(
+            reverse('auth_login'),
+            {"username": 'bob', "password": "sldkfje837&"}
+        )
+        self.profile_login_response = self.client.get(reverse('profile_view'))
         self.logout_response = self.client.get(reverse('auth_logout'))
         self.home_logout_response = self.client.get(reverse('homepage'))
 
@@ -128,15 +139,27 @@ class AuthTest(TestCase):
         """Test successful login redirection."""
         self.assertEqual(self.login_response.status_code, 302)
 
-    def test_auth_user_homepage_view(self):
-        """Test homepage has 'welcome username'."""
-        self.assertContains(self.home_login_response, "Welcome, bob")
+    def test_auth_user_profile_page_view(self):
+        """Test profile page has 'Welcome, <username>'."""
+        self.assertContains(self.profile_login_response, "Welcome, bob")
+
+    def test_welcome_username_linked_to_profile_page(self):
+        """Test that 'Welcome, <username>' links to profile page."""
+        profile_url = reverse('profile_view')
+        expected = 'href="{}"'.format(profile_url)
+        self.assertContains(self.profile_login_response, expected)
 
     def test_logout_button_exists(self):
-        """Test auth user has logout button on homepage and right url."""
+        """Test auth user has logout button on profile page and right url."""
         logout_url = reverse('auth_logout')
         expected = 'href="{}"'.format(logout_url)
-        self.assertContains(self.home_login_response, expected)
+        self.assertContains(self.profile_login_response, expected)
+
+    def test_library_button_exists(self):
+        """Test auth user has library button on profile page and right url."""
+        library_url = reverse('library')
+        expected = 'href="{}"'.format(library_url)
+        self.assertContains(self.profile_login_response, expected)
 
     def test_logout_succesful_redirection(self):
         """Test successful logout redirection."""
@@ -151,3 +174,51 @@ class AuthTest(TestCase):
         logout_url = reverse('auth_logout')
         expected = 'href="{}"'.format(logout_url)
         self.assertNotContains(self.home_logout_response, expected)
+
+
+class UrlAccessTestCase(TestCase):
+    """Define test class for url access."""
+    def setUp(self):
+        self.profile_url = reverse('profile_view')
+
+    def test_anon_user_is_redirected_to_login_from_all_urls(self):
+        """
+        Prove that an unauth user is redirected to login when trying to
+        access pages that require aythentication.
+        """
+        urls = [
+            reverse('profile_view'),
+            reverse('library'),
+            reverse('photos', kwargs={'pk': 1}),
+            reverse('albums', kwargs={'pk': 1})
+            ]
+        for url in urls:
+            response = self.client.get(url, follow=True)
+            login_url = reverse('auth_login')
+            expected_url = '{}?next={}'.format(login_url, url)
+            expected = (expected_url, 302)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(response.redirect_chain), 1)
+            self.assertTupleEqual(response.redirect_chain[0], expected)
+
+    def test_auth_user_have_access_to_urls(self):
+        """
+        Prove that an auth user has access to '/profile/', '/library/',
+        and '/albums/'.
+        """
+        urls = [
+            reverse('profile_view'),
+            reverse('library'),
+            # reverse('photos', kwargs={'pk': 1}),
+            reverse('albums', kwargs={'pk': 1})
+            ]
+        self.user = UserFactory()
+        self.user.save()
+        # self.photo1 = PhotoFactory(user=self.user)
+        # self.photo1.save()
+        self.album1 = Album(user=self.user)
+        self.album1.save()
+        self.client.force_login(user=self.user)
+        for url in urls:
+            response = self.client.get(url)
+            self.assertEquals(response.status_code, 200)

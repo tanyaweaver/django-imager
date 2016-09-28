@@ -1,16 +1,16 @@
 {% extends "imagersite/base.html" %}
 {% block body %}
-<div id="home" class="meta">
+<div class="meta">
   <h2>Welcome to <strong>Image Library</strong></h2>
   <h4>Share your photos with the world</h4>
   <h4>Create an account or log in below</h4>
   <img class="tree" src="{{ cover_path }}">
   <div>
     <a href="{% url 'auth_login' %}">
-      <input type="button" value="Login" class="btn btn-primary"></input>
+      <input type="button" value="Log In" class="btn btn-primary"/>
     </a>
     <a href="{% url 'registration_register' %}">
-      <input type="button" value="SignUp" class="btn btn-primary"></input>
+      <input type="button" value="Sign Up" class="btn btn-primary">
     </a>
   </div>
 </div>

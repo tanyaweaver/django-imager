@@ -12,7 +12,7 @@ input {
 text-align: center;
 }
 
-#thumb {
+.thumb {
  max-width: 80px;
  max-height: 80px;
  display: block;
@@ -50,4 +50,10 @@ text-align: center;
 
 .meta {
   text-align: center;
+}
+
+.profile {
+  text-align: left;
+  max-width: 40%;
+  margin: 0 auto;
 }

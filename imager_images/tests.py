@@ -2,8 +2,6 @@ from django.test import TestCase
 from imager_images.models import Photo
 from django.contrib.auth.models import User
 
-# Create your tests here.
-
 
 class PhotoTest(TestCase):
     """Create test class for ImagerProfile model."""

@@ -1,11 +1,11 @@
 from django.test import TestCase
-from imager_profile.models import ImagerProfile
 from django.contrib.auth.models import User
+# from imager_profile.models import ImagerProfile
+# from django.urls import reverse
+# import factory
 
-# Create your tests here.
 
-
-class ImagerProfileTest(TestCase):
+class ImagerProfileTestCase(TestCase):
     """Create test class for ImagerProfile model."""
     def setUp(self):
         """Set up a fake user and profile."""

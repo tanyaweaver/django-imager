@@ -18,13 +18,14 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from imagersite.views import HomeView
-import django.contrib.auth.views as dj
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', HomeView.as_view(
         template_name='imagersite/home.html'), name='homepage'),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
+    url(r'^profile/', include('imager_profile.urls')),
+    url(r'^images/', include('imager_images.urls')),
     ]
 
 if settings.DEBUG:

@@ -61,6 +61,8 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             (os.path.join(BASE_DIR, 'imagersite', 'templates')),
+            (os.path.join(BASE_DIR, 'imager_profile', 'templates')),
+            (os.path.join(BASE_DIR, 'imager_images', 'templates')),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -158,5 +160,5 @@ STATICFILES_DIRS = [
 ACCOUNT_ACTIVATION_DAYS = 7
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_REDIRECT_URL = '/'
