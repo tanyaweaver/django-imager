@@ -1,22 +1,14 @@
 {% extends "imagersite/base.html" %}
 {% block body %}
 <div class="meta">
-
-    <h4><strong>{{ album.title }}</strong></h4>
-    <p><strong>Description</strong> {{ album.description }}</p>
-    <p><strong>Date uploaded:</strong> {{ album.date_uploaded }}</p>
-    <p><strong>Date modified:</strong> {{ album.date_modified }}</p>
-    <p><strong>Date published:</strong> {{ album.date_published }}</p>
-    <p><strong>Published:</strong> {{ album.published }}</p>
-
-    <ul>
-      {% for photo in album.photos.all %}
-        <li class="photos">
-          {{ photo.title}}
-          <img id='thumb' src ="{{ photo.photo.url }}">
-        </li>
-      {% endfor %}
-    </ul>
-
+  <h2>{{ album.title }}</h2>
+  <p>{{ album.description }}</p>
+  <ul>
+    {% for photo in album.photos.all %}
+      <li class="photos">
+        <img class="thumb" src="{{ photo.photo.url }}">
+      </li>
+    {% endfor %}
+  </ul>
 </div>
 {% endblock %}

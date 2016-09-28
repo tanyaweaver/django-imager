@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
+from imager_images.models import Photo
 
 
 class LibraryView(TemplateView):
-    template_name = 'imager_images/1.html'
+    template_name = 'imager_images/library_view.html'
 
     def get_context_data(self, **kwargs):
         context = super(LibraryView, self).get_context_data(**kwargs)
@@ -14,4 +15,19 @@ class LibraryView(TemplateView):
         photos_by_date = current_user.photos.order_by('-date_uploaded')
         context['albums'] = albums_by_name
         context['photos'] = photos_by_date
+        return context
+
+
+class PhotoView(DetailView):
+    template_name = 'imager_images/photo_view.html'
+    model = Photo
+    context_object_name = 'photo'
+    pk_url_kwargs = "id"
+
+    def get_context_data(self, **kwargs):
+        context = super(PhotoView, self).get_context_data(**kwargs)
+        published = self.object.published
+        status_dict = {'pu': 'public', 'sh': 'shared', 'pr': 'private'}
+        status = status_dict[published]
+        context['status'] = status
         return context
