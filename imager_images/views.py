@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView
-from imager_images.models import Photo
+from imager_images.models import Photo, Album
 
 
 class LibraryView(TemplateView):
@@ -26,6 +26,21 @@ class PhotoView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(PhotoView, self).get_context_data(**kwargs)
+        published = self.object.published
+        status_dict = {'pu': 'public', 'sh': 'shared', 'pr': 'private'}
+        status = status_dict[published]
+        context['status'] = status
+        return context
+
+
+class AlbumView(DetailView):
+    template_name = 'imager_images/album_view.html'
+    model = Album
+    context_object_name = 'album'
+    pk_url_kwargs = "id"
+
+    def get_context_data(self, **kwargs):
+        context = super(AlbumView, self).get_context_data(**kwargs)
         published = self.object.published
         status_dict = {'pu': 'public', 'sh': 'shared', 'pr': 'private'}
         status = status_dict[published]
