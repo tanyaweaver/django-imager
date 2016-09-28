@@ -10,7 +10,7 @@ urlpatterns = [
        login_required(TemplateView.as_view(
            template_name='imager_profile/profile_view.html'
        )),
-       name='profile_home'),
+       name='profile_view'),
    ]
 
 
