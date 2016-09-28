@@ -6,14 +6,26 @@
       {% for album in albums %}
       <li class="albums">
         <h4>{{ album.title }}</h4>
+
           {% if album.cover %}
             <img class="thumb" src="{{ album.cover.photo.url }}">
           {% else %}
            {% load static %}
             <img class="thumb" src="{% static 'images/tanyastree.jpeg' %}">
           {% endif %}
+
         </li>
         {% endfor %}
+    </ul>
+
+  <h2>Photos</h2>
+    <ul>
+      {% for photo in photos %}
+      <li class="photos">
+        <h4>{{ photo.title }}</h4>
+        <img class="thumb" src="{{ photo.photo.url }}">
+      </li>
+      {% endfor %}
     </ul>
 
 
