@@ -6,11 +6,9 @@ from django.urls import reverse
 
 class EditProfileView(UpdateView):
     """Define edit profile class."""
-    template_name = 'imager_images/edit_profile_page.html'
+    template_name = 'imager_profile/edit_profile_page.html'
     model = ImagerProfile
     fields = [
-        'first_name',
-        'last_name',
         'camera_type',
         'address',
         'website',

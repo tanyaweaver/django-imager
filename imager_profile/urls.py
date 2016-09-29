@@ -12,7 +12,7 @@ urlpatterns = [
            template_name='imager_profile/profile_page.html'
        )),
        name='profile_view'),
-   url(r'^profile/(?P<pk>\d+)/edit/$',
+   url(r'^(?P<pk>\d+)/edit/$',
        login_required(EditProfileView.as_view()),
        name='profile_edit'),
    ]
