@@ -12,6 +12,58 @@ TEST_PHOTO_PATH = os.path.join(HERE, 'test_resources', 'tree.jpg')
 TEST_MEDIA_ROOT = tempfile.mkdtemp()
 
 
+class EditAlbumTestCase(TestCase):
+    """Define test case class for album editing."""
+    def setUp(self):
+        """Set up for the test case class."""
+        self.user = User(username='test')
+        self.user.set_password('supersecret')
+        self.user.save()
+        self.album = Album(user=self.user)
+        self.album.save()
+        self.client.force_login(user=self.user)
+
+    def tearDown(self):
+        """Destroy setup."""
+        self.user.delete()
+        self.album.delete()
+
+    def test_edit_album_button_url(self):
+        """Prove that auth user has access to the edit."""
+        url = reverse('album_edit', kwargs={'pk': 3})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_redirect_on_update_from_edit_album_page(self):
+        """
+        Prove that the user is redirected after successfully updating the
+        an album.
+        """
+        url = reverse('album_edit', kwargs={'pk': 4})
+        id_list = []
+        photos = PhotoFactory.build_batch(10, user=self.user)
+        for photo in photos:
+            photo.save()
+            id_list.append(photo.pk)
+        data = {
+            "photos": id_list
+        }
+        response = self.client.post(url, data)
+        #import pdb; pdb.set_trace()
+        self.assertEquals(response.status_code, 302)
+
+
+class EditPhotoTestCase(TestCase):
+    """Define test case class for photo editing."""
+    def setUp(self):
+        pass
+
+
+class EditProfileTestCase(TestCase):
+    """Define test case class for profile editing."""
+    def setUp(self):
+        pass
+
 class PhotoFactory(factory.Factory):
     """Create a photo factory."""
     class Meta:
@@ -26,6 +78,12 @@ class AlbumAddTestCAse(TestCase):
         self.user.set_password("supersecret")
         self.user.save()
         self.url = reverse('album_add')
+
+    def tearDown(self):
+        """Destroy setup."""
+        self.user.delete()
+        all_alb = Album.objects.all()
+        all_alb.delete()
 
     def get_auth_response(self):
         self.client.force_login(user=self.user)
@@ -77,8 +135,10 @@ class PhotoAddTestCase(TestCase):
         self.tempdir = tempfile.mkdtemp()
 
     def TearDown(self):
-        import shutil
-        shutil.rmtree(self.tempdir)
+        """Destroy setup."""
+        # import shutil
+        # shutil.rmtree(self.tempdir)
+        self.user.delete()
 
     def get_auth_response(self):
         self.client.force_login(user=self.user)

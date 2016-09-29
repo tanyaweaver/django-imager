@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView, CreateView
+from django.views.generic import (
+    TemplateView, DetailView, CreateView, UpdateView
+    )
 from imager_images.models import Photo, Album
 from django.urls import reverse
 
@@ -92,3 +94,37 @@ class AddAlbumView(CreateView):
         """Assign a user attr to an instance."""
         form.instance.user = self.request.user
         return super(AddAlbumView, self).form_valid(form)
+
+
+class EditAlbumView(UpdateView):
+    """Define edit album class."""
+    template_name = 'imager_images/edit_album_page.html'
+    model = Album
+    fields = ['title', 'description', 'photos', 'published']
+
+    def get_form(self, form_class=None):
+        """
+        Modify 'photos' field in the form to show only user-specific photos.
+        """
+        form = super(EditAlbumView, self).get_form(form_class)
+        qs = form.fields['photos'].queryset
+        qs = qs.filter(user=self.request.user)
+        form.fields['photos'].queryset = qs
+        return form
+
+    def get_success_url(self):
+        """Set redirection after updating the album."""
+        url = reverse('library')
+        return url
+
+
+class EditPhotoView(UpdateView):
+    """Define edit photo class."""
+    template_name = 'imager_images/edit_photo_page.html'
+    model = Photo
+    fields = ['title', 'description', 'published']
+
+    def get_success_url(self):
+        """Set redirection after updating the album."""
+        url = reverse('library')
+        return url

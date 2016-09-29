@@ -8,6 +8,8 @@ from imager_images.views import (
     AlbumView,
     UploadPhotoView,
     AddAlbumView,
+    EditAlbumView,
+    EditPhotoView,
     )
 
 
@@ -26,7 +28,13 @@ urlpatterns = [
         name='photo_add'),
     url(r'^albums/add/$',
         login_required(AddAlbumView.as_view()),
-        name='album_add')
+        name='album_add'),
+    url(r'^albums/(?P<pk>\d+)/edit/$',
+        login_required(EditAlbumView.as_view()),
+        name='album_edit'),
+    url(r'^photos/(?P<pk>\d+)/edit$',
+        login_required(EditPhotoView.as_view()),
+        name='photo_edit'),
     ]
 
 if settings.DEBUG:
