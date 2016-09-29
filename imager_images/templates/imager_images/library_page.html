@@ -2,6 +2,9 @@
 {% block body %}
 <div class="meta">
   <h2>Albums</h2>
+  <a href="{% url 'album_add' %}">
+    <input class="btn btn-primary" type="button" value="Add Album"/>
+  </a>
     <ul>
       {% for album in albums %}
       <li class="albums">
@@ -21,6 +24,9 @@
     </ul>
 
   <h2>Photos</h2>
+    <a href="{% url 'photo_add' %}">
+      <input class="btn btn-primary" type="button" value="Add Photo"/>
+    </a>
     <ul>
       {% for photo in photos %}
       <li class="photos">

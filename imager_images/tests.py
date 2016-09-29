@@ -44,23 +44,19 @@ class PhotoAddTestCase(TestCase):
         response = self.get_auth_response()
         self.assertIn('form', response.context)
 
+    @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
     def test_uploaded_photo_redirects_correctly(self):
-        # with self.settings(MEDIA_ROOT=self.tempdir):
-            # make sure there are no photos in db now
         self.assertEqual(Photo.objects.count(), 0)
         self.client.force_login(user=self.user)
         with open(TEST_PHOTO_PATH, 'rb') as fh:
             data = {
-                'photo': fh,
-                'user': self.user.pk
+                'photo': fh
             }
             response = self.client.post(self.url, data)
-        #import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Photo.objects.count(), 1)
         new_photo = Photo.objects.first()
         self.assertEqual(new_photo.user, self.user)
-
 
 
 class PhotoTest(TestCase):

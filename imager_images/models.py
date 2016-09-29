@@ -39,6 +39,11 @@ class Photo(models.Model):
     def __str__(self):
         return 'Photo for {}'.format(self.user)
 
+    # @property
+    # def photo_url(self):
+    #     if self.photo and hasattr(self.photo, 'url'):
+    #         return self.photo.url
+
 
 @python_2_unicode_compatible
 class Album(models.Model):
