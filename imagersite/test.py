@@ -190,7 +190,9 @@ class UrlAccessTestCase(TestCase):
             reverse('profile_view'),
             reverse('library'),
             reverse('photos', kwargs={'pk': 1}),
-            reverse('albums', kwargs={'pk': 1})
+            reverse('albums', kwargs={'pk': 1}),
+            reverse('album_add'),
+            reverse('photo_add'),
             ]
         for url in urls:
             response = self.client.get(url, follow=True)
@@ -210,7 +212,9 @@ class UrlAccessTestCase(TestCase):
             reverse('profile_view'),
             reverse('library'),
             # reverse('photos', kwargs={'pk': 1}),
-            reverse('albums', kwargs={'pk': 1})
+            # reverse('albums', kwargs={'pk': 1}),
+            reverse('album_add'),
+            reverse('photo_add'),
             ]
         self.user = UserFactory()
         self.user.save()
