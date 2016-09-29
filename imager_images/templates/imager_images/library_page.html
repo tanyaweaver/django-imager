@@ -20,9 +20,9 @@
           {% endif %}
         </a>
 
-              <a href="{% url 'album_edit' album.pk %}">
-                <input class="btn btn-primary" type="button" value="Edit Album"/>
-              </a>
+        <a href="{% url 'album_edit' album.pk %}">
+          <input class="btn btn-primary" type="button" value="Edit Album"/>
+        </a>
 
         </li>
         {% endfor %}
@@ -35,15 +35,16 @@
     <ul>
       {% for photo in photos %}
 
-      <a href="{% url 'photo_edit' photo.pk %}">
-        <input class="btn btn-primary" type="button" value="Edit Photo"/>
-      </a>
-
       <li class="photos">
         <h4>{{ photo.title }}</h4>
           <a href="{% url 'photos' photo.pk %}">
             <img class="thumb" src="{{ photo.photo.url }}">
           </a>
+
+          <a href="{% url 'photo_edit' photo.pk %}">
+            <input class="btn btn-primary" type="button" value="Edit Photo"/>
+          </a>
+          
       </li>
       {% endfor %}
     </ul>
