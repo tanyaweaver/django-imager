@@ -16,18 +16,34 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = 'a!3n!xie47x**unfp5hdi_=nxmq%!4o9wym)ev=*$wqu=q=c@&'
+
+DEBUG = False
+TEMPLATE_DEBUG = False
+ALLOWED_HOSTS = ["ec2-52-88-19-175.us-west-2.compute.amazonaws.com", "localhost"]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'a!3n!xie47x**unfp5hdi_=nxmq%!4o9wym)ev=*$wqu=q=c@&'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
+MEDIA_ROOT = os.environ.get("MEDIA_ROOT")
+PORT = os.environ.get("PORT")
+STATIC_ROOT = os.environ.get("STATIC_ROOT")
+REDIS_URL = os.environ.get("REDIS_URL")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+SENTRY_DSN = os.environ.get("SENTRY_DSN")
+STATIC_URL = os.environ.get("STATIC_URL")
+DEBUG = bool(os.environ.get('DEBUG', False))
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -82,22 +98,22 @@ WSGI_APPLICATION = 'imagersite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'imager_site',
-        'USER': os.environ.get("DB_USER"),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-    }
-}
-
 # DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgres://{}@localhost:5432/imager_site'
-#         .format(os.environ.get('USER')))
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'imager_site',
+#         'USER': os.environ.get("DB_USER"),
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+#         'HOST': os.environ.get('DB_HOST'),
+#         'PORT': os.environ.get('DB_PORT'),
+#     }
 # }
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://{}@localhost:5432/imager_site'
+        .format(os.environ.get('USER')))
+}
 
 # DATABASES = {
 #     'default': {
