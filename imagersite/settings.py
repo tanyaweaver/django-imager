@@ -24,27 +24,21 @@ MEDIA_URL = '/media/'
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'a!3n!xie47x**unfp5hdi_=nxmq%!4o9wym)ev=*$wqu=q=c@&'
 
-DEBUG = False
-TEMPLATE_DEBUG = False
-ALLOWED_HOSTS = ["ec2-52-88-19-175.us-west-2.compute.amazonaws.com", "localhost"]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
+# MEDIA_ROOT = os.environ.get("MEDIA_ROOT")
+# PORT = os.environ.get("PORT")
+# STATIC_ROOT = os.environ.get("STATIC_ROOT")
+# REDIS_URL = os.environ.get("REDIS_URL")
+# SECRET_KEY = os.environ.get("SECRET_KEY")
+# SENTRY_DSN = os.environ.get("SENTRY_DSN")
+# STATIC_URL = os.environ.get("STATIC_URL")
+# DEBUG = bool(os.environ.get('DEBUG', False))
 
+
+ALLOWED_HOSTS = []
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a!3n!xie47x**unfp5hdi_=nxmq%!4o9wym)ev=*$wqu=q=c@&'
-
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
-MEDIA_ROOT = os.environ.get("MEDIA_ROOT")
-PORT = os.environ.get("PORT")
-STATIC_ROOT = os.environ.get("STATIC_ROOT")
-REDIS_URL = os.environ.get("REDIS_URL")
-SECRET_KEY = os.environ.get("SECRET_KEY")
-SENTRY_DSN = os.environ.get("SENTRY_DSN")
-STATIC_URL = os.environ.get("STATIC_URL")
-DEBUG = bool(os.environ.get('DEBUG', False))
-
-
-
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 # Application definition
 
