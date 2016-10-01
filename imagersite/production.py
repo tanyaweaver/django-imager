@@ -1,4 +1,6 @@
+import dj_database_url
 import os
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -12,3 +14,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://{}@localhost:5432/imager_site'
+        .format(os.environ.get('USER')))
+}
