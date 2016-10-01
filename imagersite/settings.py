@@ -25,6 +25,7 @@ MEDIA_URL = '/media/'
 # SECRET_KEY = 'a!3n!xie47x**unfp5hdi_=nxmq%!4o9wym)ev=*$wqu=q=c@&'
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
 # STATIC_ROOT = os.environ.get("STATIC_ROOT")
 # REDIS_URL = os.environ.get("REDIS_URL")
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -165,6 +166,5 @@ STATICFILES_DIRS = [
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_REDIRECT_URL = '/'
