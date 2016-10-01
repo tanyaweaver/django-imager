@@ -29,7 +29,7 @@ EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # REDIS_URL = os.environ.get("REDIS_URL")
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = bool(os.environ.get('DEBUG', False))
+DEBUG = os.environ.get('DEBUG')
 
 
 # ALLOWED_HOSTS = []
