@@ -9,6 +9,8 @@ class EditProfileView(UpdateView):
     template_name = 'imager_profile/edit_profile_page.html'
     model = ImagerProfile
     fields = [
+        'first_name',
+        'last_name',
         'camera_type',
         'address',
         'website',
