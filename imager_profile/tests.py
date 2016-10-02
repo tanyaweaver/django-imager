@@ -1,6 +1,5 @@
 from django.test import TestCase, override_settings
 from django.contrib.auth.models import User
-from imager_profile.models import ImagerProfile
 from imager_images.models import Photo, Album
 from django.urls import reverse
 import os
@@ -8,7 +7,7 @@ from io import open
 import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TEST_PHOTO_PATH = os.path.join(HERE, 'test_resources', 'tree.jpg')
+TEST_PHOTO_PATH = os.path.join(HERE, 'test_resources', 'download.jpeg')
 TEST_MEDIA_ROOT = tempfile.mkdtemp()
 
 
@@ -98,7 +97,8 @@ class ProfileViewTestCase(TestCase):
             'profile_edit', kwargs={'pk': self.user.pk}))
         self.assertContains(self.response, expected)
 
-    def test_right_number_of_photos_displayed(self):
+    def test_right_number_of_photos_and_albums_displayed(self):
+        """Prove right number of photos and albums displayed."""
         photos = Photo.objects.filter(user=self.user).count()
         albums = Album.objects.filter(user=self.user).count()
         self.assertContains(self.response, str(photos) + ' photos')

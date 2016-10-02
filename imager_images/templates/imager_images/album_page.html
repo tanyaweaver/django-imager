@@ -9,6 +9,7 @@
   <ul>
     {% for photo in album.photos.all %}
       <li class="photos">
+        <p><strong>cover: </strong> {{ photo.is_cover }}</p>
         <img class="thumb" src="{{ photo.photo.url }}">
       </li>
     {% endfor %}

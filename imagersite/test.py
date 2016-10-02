@@ -2,8 +2,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.core import mail
 from django.contrib.auth.models import User
-import factory
-from imager_images.models import Photo, Album
 
 
 class HomePageTestCase(TestCase):
@@ -40,6 +38,28 @@ class HomePageTestCase(TestCase):
         """Assert that the context used to render the home page is right."""
         self.assertTrue('cover_path' in self.response.context)
 
+    def test_anon_user_is_redirected_to_login_from_all_urls(self):
+        """Prove that an unauth user is redirected to login."""
+        urls = [
+            reverse('profile_view'),
+            reverse('library'),
+            reverse('photos', kwargs={'pk': 1}),
+            reverse('albums', kwargs={'pk': 1}),
+            reverse('album_add'),
+            reverse('photo_add'),
+            reverse('photo_edit', kwargs={'pk': 1}),
+            reverse('album_edit', kwargs={'pk': 1}),
+            reverse('profile_edit', kwargs={'pk': 1})
+            ]
+        for url in urls:
+            response = self.client.get(url, follow=True)
+            login_url = reverse('auth_login')
+            expected_url = '{}?next={}'.format(login_url, url)
+            expected = (expected_url, 302)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(len(response.redirect_chain), 1)
+            self.assertTupleEqual(response.redirect_chain[0], expected)
+
 
 class RegistrationTestCase(TestCase):
     """Setup Registration test case."""
@@ -51,10 +71,6 @@ class RegistrationTestCase(TestCase):
             'password1': 'fseIJE#*$83',
             'password2': 'fseIJE#*$83'
             })
-
-    def tearDown(self):
-        """Tear down setup."""
-        pass
 
     def test_client_response_code(self):
         """Test 302 response code received."""
@@ -100,27 +116,11 @@ class EmailTest(TestCase):
         self.assertEqual(mail.outbox[0].from_email, "user@djangoimager.com")
 
 
-class UserFactory(factory.Factory):
-    class Meta:
-        model = User
-
-
-class PhotoFactory(factory.Factory):
-    class Meta:
-        model = Photo
-
-
-class AlbumFactory(factory.Factory):
-    class Meta:
-        model = Album
-
-
 class AuthTest(TestCase):
     """Create Login test case."""
     def setUp(self):
         """Set up response for login tests."""
-        self.user = UserFactory()
-        self.user.username = 'bob'
+        self.user = User(username='bob')
         self.user.set_password('sldkfje837&')
         self.user.save()
         self.login_response = self.client.post(
@@ -170,46 +170,3 @@ class AuthTest(TestCase):
         logout_url = reverse('auth_logout')
         expected = 'href="{}"'.format(logout_url)
         self.assertNotContains(self.home_logout_response, expected)
-
-
-class UrlAccessTestCase(TestCase):
-    """Define test class for url access."""
-    def setUp(self):
-        """Setup for the class."""
-        self.user = User(username='test')
-        self.user.save()
-        self.album = Album(user=self.user)
-        self.album.save()
-        self.photo = Photo(user=self.user)
-        self.photo.save()
-
-    def submit_photo(self):
-        """Return response after submitting a photo."""
-        with open(TEST_PHOTO_PATH, 'rb') as fh:
-            data = {
-                'photo': fh
-            }
-            response = self.client.post(reverse('photo_add'), data)
-        return response
-
-    def test_anon_user_is_redirected_to_login_from_all_urls(self):
-        """Prove that an unauth user is redirected to login."""
-        urls = [
-            reverse('profile_view'),
-            reverse('library'),
-            reverse('photos', kwargs={'pk': self.user.pk}),
-            reverse('albums', kwargs={'pk': self.user.pk}),
-            reverse('album_add'),
-            reverse('photo_add'),
-            reverse('photo_edit', kwargs={'pk': self.photo.pk}),
-            reverse('album_edit', kwargs={'pk': self.album.pk}),
-            reverse('profile_edit', kwargs={'pk': self.user.pk})
-            ]
-        for url in urls:
-            response = self.client.get(url, follow=True)
-            login_url = reverse('auth_login')
-            expected_url = '{}?next={}'.format(login_url, url)
-            expected = (expected_url, 302)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(len(response.redirect_chain), 1)
-            self.assertTupleEqual(response.redirect_chain[0], expected)

@@ -1,4 +1,3 @@
-from imagersite.settings import BASE_DIR
 from django.views.generic.base import TemplateView
 from imager_images.models import Photo
 
