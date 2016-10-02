@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.generic import (
     TemplateView, DetailView, CreateView, UpdateView
     )
@@ -7,7 +6,7 @@ from django.urls import reverse
 
 
 class LibraryView(TemplateView):
-    """Establish class of view for library page."""
+    """Establish class for the view for library page."""
     template_name = 'imager_images/library_page.html'
 
     def get_context_data(self, **kwargs):
@@ -27,7 +26,6 @@ class PhotoView(DetailView):
     template_name = 'imager_images/photo_page.html'
     model = Photo
     context_object_name = 'photo'
-    # pk_url_kwargs = "id"
 
     def get_context_data(self, **kwargs):
         """Return modified context for photo page."""

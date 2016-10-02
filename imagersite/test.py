@@ -213,19 +213,3 @@ class UrlAccessTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(len(response.redirect_chain), 1)
             self.assertTupleEqual(response.redirect_chain[0], expected)
-
-    def test_auth_user_have_access_to_urls(self):
-        """
-        Prove that an auth user has access to '/profile/', '/library/',
-        '/photos/', '/albums/'.
-        """
-        self.client.force_login(user=self.user)
-        urls = [
-            reverse('profile_view'),
-            # reverse('library'),
-            # reverse('photos', kwargs={'pk': self.photo.pk}),
-            reverse('albums', kwargs={'pk': self.album.pk}),
-            ]
-        for url in urls:
-            response = self.client.get(url)
-            self.assertEquals(response.status_code, 200)
