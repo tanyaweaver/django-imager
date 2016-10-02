@@ -74,10 +74,19 @@ class AlbumModelTest(TestCase):
         self.assertEqual(self.album.photos.count(), 1)
 
 
-class PhotosViewTestCase(TestCase):
-    """Define class to test photos view."""
+class PhotoFactory(factory.Factory):
+    """Create a photo factory."""
+    class Meta:
+        model = Photo
+
+
+class SetupTestCase(TestCase):
+    """
+    Define class for tests setup. All other test classes inherit
+    form this class.
+    """
     def setUp(self):
-        """Define setup for tests."""
+        """Define setup for tests.."""
         self.user = User(username='test')
         self.user.save()
         self.client.force_login(user=self.user)
@@ -85,8 +94,6 @@ class PhotosViewTestCase(TestCase):
         self.upload_photos_add_album()
         self.photo = Photo.objects.filter(user=self.user).first()
         self.album = Album.objects.filter(user=self.user).first()
-        self.url = reverse('photos', kwargs={'pk': self.photo.pk})
-        self.response = self.client.get(self.url)
 
     @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
     def upload_photos_add_album(self):
@@ -105,6 +112,39 @@ class PhotosViewTestCase(TestCase):
             'user': self.user,
         }
         self.client.post(reverse('album_add'), data)
+
+    @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
+    def submit_photo(self):
+        """Return response after submitting a photo."""
+        with open(TEST_PHOTO_PATH, 'rb') as fh:
+            data = {
+                'photo': fh
+            }
+            response = self.client.post(self.url, data)
+        return response
+
+    def submit_album(self):
+        """Return response after submitting an album with 10 photos."""
+        id_list = []
+        photos = PhotoFactory.build_batch(10, user=self.user)
+        for photo in photos:
+            photo.save()
+            id_list.append(photo.pk)
+        data = {
+            "title": 'album2',
+            "photos": id_list
+        }
+        response = self.client.post(self.url, data)
+        return response
+
+
+class PhotosViewTestCase(SetupTestCase):
+    """Define class to test photos view."""
+    def setUp(self):
+        self.setUp = super(PhotosViewTestCase, self).setUp()
+        self.url = reverse('photos', kwargs={'pk': self.photo.pk})
+        self.response = self.client.get(self.url)
+        self.template = 'imager_images/photo_page.html'
 
     def test_auth_user_has_access_to_photos(self):
         """Prove that response code is 200 for auth users."""
@@ -112,43 +152,17 @@ class PhotosViewTestCase(TestCase):
 
     def test_right_template_is_used(self):
         """Prove that right template is used to render photos page."""
-        self.assertTemplateUsed(
-            self.response,
-            'imager_images/photo_page.html'
-        )
+        self.assertTemplateUsed(self.response, self.template)
 
 
-class AlbumsViewTestCase(TestCase):
+class AlbumsViewTestCase(SetupTestCase):
     """Define class to test albums view."""
     def setUp(self):
         """Define setup for tests."""
-        self.user = User(username='test')
-        self.user.save()
-        self.client.force_login(user=self.user)
-        self.tempdir = tempfile.mkdtemp()
-        self.upload_photos_add_album()
-        self.photo = Photo.objects.filter(user=self.user).first()
-        self.album = Album.objects.filter(user=self.user).first()
+        self.setUp = super(AlbumsViewTestCase, self).setUp()
         self.url = reverse('albums', kwargs={'pk': self.album.pk})
         self.response = self.client.get(self.url)
-
-    @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
-    def upload_photos_add_album(self):
-        """Upload photos and add albums for the user."""
-        with open(TEST_PHOTO_PATH, 'rb') as fh:
-            data = {
-                'user': self.user,
-                'photo': fh,
-                'title': 'photo1'
-            }
-            self.client.post(reverse('photo_add'), data)
-        ph = Photo.objects.filter(user=self.user).first()
-        data = {
-            'title': 'album1',
-            'photos': ph.pk,
-            'user': self.user,
-        }
-        self.client.post(reverse('album_add'), data)
+        self.template = 'imager_images/album_page.html'
 
     def test_auth_user_has_access_to_albums(self):
         """Prove that response code is 200 for auth users."""
@@ -156,49 +170,17 @@ class AlbumsViewTestCase(TestCase):
 
     def test_right_template_is_used(self):
         """Prove that right template is used to render album page."""
-        self.assertTemplateUsed(
-            self.response,
-            'imager_images/album_page.html'
-        )
+        self.assertTemplateUsed(self.response, self.template)
 
 
-class PhotoFactory(factory.Factory):
-    """Create a photo factory."""
-    class Meta:
-        model = Photo
-
-
-class LibraryViewTestCase(TestCase):
+class LibraryViewTestCase(SetupTestCase):
     """Define test class for libarry view."""
     def setUp(self):
         """Define setup for tests."""
-        self.user = User(username='test')
-        self.user.save()
-        self.client.force_login(user=self.user)
-        self.tempdir = tempfile.mkdtemp()
-        self.upload_photos_add_album()
-        self.photo = Photo.objects.filter(user=self.user).first()
-        self.album = Album.objects.filter(user=self.user).first()
+        self.setUp = super(LibraryViewTestCase, self).setUp()
         self.url = reverse('library')
         self.response = self.client.get(self.url)
-
-    @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
-    def upload_photos_add_album(self):
-        """Upload photos and add albums for the user."""
-        with open(TEST_PHOTO_PATH, 'rb') as fh:
-            data = {
-                'user': self.user,
-                'photo': fh,
-                'title': 'photo1'
-            }
-            self.client.post(reverse('photo_add'), data)
-        ph = Photo.objects.filter(user=self.user).first()
-        data = {
-            'title': 'album1',
-            'photos': ph.pk,
-            'user': self.user,
-        }
-        self.client.post(reverse('album_add'), data)
+        self.template = 'imager_images/library_page.html'
 
     def test_auth_user_has_access_to_library(self):
         """Prove that response code is 200 for auth users."""
@@ -206,10 +188,7 @@ class LibraryViewTestCase(TestCase):
 
     def test_right_template_is_used(self):
         """Prove that right template is used to render library page."""
-        self.assertTemplateUsed(
-            self.response,
-            'imager_images/library_page.html'
-        )
+        self.assertTemplateUsed(self.response, self.template)
 
     def test_buttons_present(self):
         """Prove that expected buttons are present."""
@@ -230,16 +209,14 @@ class LibraryViewTestCase(TestCase):
             self.assertIn(x, self.response.context)
 
 
-class PhotoAddTestCase(TestCase):
+class PhotoAddTestCase(SetupTestCase):
     """Set up class to test view for adding photos."""
     def setUp(self):
         """Define setup for tests."""
-        self.user = User(username='test')
-        self.user.save()
-        self.client.force_login(user=self.user)
+        self.setUp = super(PhotoAddTestCase, self).setUp()
         self.url = reverse('photo_add')
         self.response = self.client.get(self.url)
-        self.tempdir = tempfile.mkdtemp()
+        self.template = 'imager_images/upload_photo_page.html'
 
     def test_auth_user_has_access_to_add_photo(self):
         """Prove that response code is 200 for auth users."""
@@ -251,51 +228,35 @@ class PhotoAddTestCase(TestCase):
 
     def test_right_template_is_used(self):
         """Prove that right template is used to render add photo page."""
-        self.assertTemplateUsed(
-            self.response,
-            'imager_images/upload_photo_page.html'
-        )
-
-    @override_settings(MEDIA_ROOT=TEST_MEDIA_ROOT)
-    def submit_photo(self):
-        """Return response after submitting a photo."""
-        with open(TEST_PHOTO_PATH, 'rb') as fh:
-            data = {
-                'photo': fh
-            }
-            response = self.client.post(self.url, data)
-        return response
+        self.assertTemplateUsed(self.response, self.template)
 
     def test_uploaded_photo_added_correctly(self):
         """
         Prove that 1 photo is added to the db after photo upload. Prove that
         the photo is associated with the correct user.
         """
-        self.assertEqual(Photo.objects.count(), 0)
-        self.submit_photo()
+        # there is 1 photo in the db already (see SetupTestCase setUp(self))
         self.assertEqual(Photo.objects.count(), 1)
-        new_photo = Photo.objects.first()
+        self.submit_photo()
+        self.assertEqual(Photo.objects.count(), 2)
+        new_photo = Photo.objects.last()
         self.assertEqual(new_photo.user, self.user)
 
     def test_redirection_after_photo_submitted(self):
-        """
-        Prove redirection to the library page after uploading a photo.
-        """
+        """Prove redirection to library page after uploading a photo."""
         response = self.submit_photo()
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/images/library/')
 
 
-class AlbumAddTestCAse(TestCase):
+class AlbumAddTestCase(SetupTestCase):
     """Define a class to test addition of album."""
     def setUp(self):
         """Set up the class."""
-        self.user = User(username="test")
-        self.user.set_password("supersecret")
-        self.user.save()
+        self.setUp = super(AlbumAddTestCase, self).setUp()
         self.url = reverse('album_add')
-        self.client.force_login(user=self.user)
         self.response = self.client.get(self.url)
+        self.template = 'imager_images/add_album_page.html'
 
     def test_auth_user_has_access_to_add_album(self):
         """Prove that response code is 200 for auth users."""
@@ -303,35 +264,23 @@ class AlbumAddTestCAse(TestCase):
 
     def test_right_template_is_used(self):
         """Prove that right template is used to render add album page."""
-        self.assertTemplateUsed(
-            self.response,
-            'imager_images/add_album_page.html'
-        )
+        self.assertTemplateUsed(self.response, self.template)
 
     def test_form_present_in_context(self):
         """Prove that form is present in response context."""
         self.assertIn('form', self.response.context)
-
-    def submit_album(self):
-        """Return response after submitting an album."""
-        ph = Photo(user=self.user)
-        ph.save()
-        data = {
-            'photos': ph.pk
-        }
-        response = self.client.post(self.url, data)
-        return response
 
     def test_add_album_correctly(self):
         """
         Prove that 1 album is added to the db after submit.
         Prove that the album is associated with the correct user.
         """
-        self.assertEqual(Album.objects.count(), 0)
-        self.submit_album()
+        # there is 1 album in the db already (see SetupTestCase setUp(self))
         self.assertEqual(Album.objects.count(), 1)
-        new_photo = Photo.objects.first()
-        self.assertEqual(new_photo.user, self.user)
+        self.submit_album()
+        self.assertEqual(Album.objects.count(), 2)
+        new_album = Album.objects.last()
+        self.assertEqual(new_album.user, self.user)
 
     def test_add_album_redirects_correctly(self):
         """
@@ -343,31 +292,19 @@ class AlbumAddTestCAse(TestCase):
 
     def test_album_has_correct_number_photos_added(self):
         """Test album adds correct number of photos."""
-        id_list = []
-        photos = PhotoFactory.build_batch(10, user=self.user)
-        for photo in photos:
-            photo.save()
-            id_list.append(photo.pk)
-        data = {
-            "photos": id_list
-        }
-        self.client.post(self.url, data)
+        self.submit_album()
         self.assertEqual(Album.objects.filter(
-            user=self.user).first().photos.count(), 10)
+            user=self.user).last().photos.count(), 10)
 
 
-class EditPhotoTestCase(TestCase):
+class EditPhotoTestCase(SetupTestCase):
     """Define test case class for photo editing."""
     def setUp(self):
         """Set up for the test case class."""
-        self.user = User(username='test')
-        self.user.set_password('supersecret')
-        self.user.save()
-        self.photo = Photo(user=self.user)
-        self.photo.save()
-        self.client.force_login(user=self.user)
+        self.setUp = super(EditPhotoTestCase, self).setUp()
         self.url = reverse('photo_edit', kwargs={'pk': self.photo.pk})
         self.response = self.client.get(self.url)
+        self.template = 'imager_images/edit_photo_page.html'
 
     def test_auth_user_have_access_to_photo_edit(self):
         """Prove that auth user has access to the album edit."""
@@ -375,48 +312,27 @@ class EditPhotoTestCase(TestCase):
 
     def test_right_template_is_used(self):
         """Prove that right template is used to render edit photo page."""
-        self.assertTemplateUsed(
-            self.response,
-            'imager_images/edit_photo_page.html'
-        )
+        self.assertTemplateUsed(self.response, self.template)
 
     def test_form_present_in_context(self):
         """Prove that form is present in response context."""
         self.assertIn('form', self.response.context)
 
     def test_redirect_on_photo_update(self):
-        """
-        Prove redirection to the library page after photo edited.
-        """
+        """Prove redirection to the library page after photo edited."""
         response = self.client.post(self.url)
         self.assertEquals(response.status_code, 302)
         self.assertEquals(response.url, '/images/library/')
 
 
-class EditAlbumTestCase(TestCase):
+class EditAlbumTestCase(SetupTestCase):
     """Define test case class for album editing."""
     def setUp(self):
         """Set up for the test case class."""
-        self.user = User(username='test')
-        self.user.set_password('supersecret')
-        self.user.save()
-        self.album = Album(user=self.user)
-        self.album.save()
-        self.client.force_login(user=self.user)
+        self.setUp = super(EditAlbumTestCase, self).setUp()
         self.url = reverse('album_edit', kwargs={'pk': self.album.pk})
         self.response = self.client.get(self.url)
-
-    def photos_to_submit(self):
-        """Create photos to submit with post request."""
-        id_list = []
-        photos = PhotoFactory.build_batch(10, user=self.user)
-        for photo in photos:
-            photo.save()
-            id_list.append(photo.pk)
-        data = {
-            "photos": id_list
-        }
-        return data
+        self.template = 'imager_images/edit_album_page.html'
 
     def test_auth_user_have_access_to_album_edit(self):
         """Prove that auth user has access to the album edit."""
@@ -424,28 +340,20 @@ class EditAlbumTestCase(TestCase):
 
     def test_right_template_is_used(self):
         """Prove that right template is used to render edit album page."""
-        self.assertTemplateUsed(
-            self.response,
-            'imager_images/edit_album_page.html'
-        )
+        self.assertTemplateUsed(self.response, self.template)
 
     def test_form_present_in_context(self):
         """Prove that form is present in response context."""
         self.assertIn('form', self.response.context)
 
     def test_redirect_on_update_from_edit_album_page(self):
-        """
-        Prove redirection to the library page after successfully updating
-        an album.
-        """
-        data = self.photos_to_submit()
-        response = self.client.post(self.url, data)
+        """Prove redirection to library page after updating an album."""
+        response = self.submit_album()
         self.assertEquals(response.status_code, 302)
         self.assertEquals(response.url, '/images/library/')
 
     def test_album_has_right_number_photos_added(self):
         """Test album adds correct number of photos."""
-        data = self.photos_to_submit()
-        self.client.post(self.url, data)
+        self.submit_album()
         self.assertEqual(Album.objects.filter(
             user=self.user).first().photos.count(), 10)
