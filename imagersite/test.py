@@ -131,10 +131,6 @@ class AuthTest(TestCase):
         self.logout_response = self.client.get(reverse('auth_logout'))
         self.home_logout_response = self.client.get(reverse('homepage'))
 
-    def tearDown(self):
-        """Tear down set up."""
-        pass
-
     def test_login_successful_redirection(self):
         """Test successful login redirection."""
         self.assertEqual(self.login_response.status_code, 302)
@@ -179,20 +175,35 @@ class AuthTest(TestCase):
 class UrlAccessTestCase(TestCase):
     """Define test class for url access."""
     def setUp(self):
-        self.profile_url = reverse('profile_view')
+        """Setup for the class."""
+        self.user = User(username='test')
+        self.user.save()
+        self.album = Album(user=self.user)
+        self.album.save()
+        self.photo = Photo(user=self.user)
+        self.photo.save()
+
+    def submit_photo(self):
+        """Return response after submitting a photo."""
+        with open(TEST_PHOTO_PATH, 'rb') as fh:
+            data = {
+                'photo': fh
+            }
+            response = self.client.post(reverse('photo_add'), data)
+        return response
 
     def test_anon_user_is_redirected_to_login_from_all_urls(self):
-        """
-        Prove that an unauth user is redirected to login when trying to
-        access pages that require aythentication.
-        """
+        """Prove that an unauth user is redirected to login."""
         urls = [
             reverse('profile_view'),
             reverse('library'),
-            reverse('photos', kwargs={'pk': 1}),
-            reverse('albums', kwargs={'pk': 1}),
+            reverse('photos', kwargs={'pk': self.user.pk}),
+            reverse('albums', kwargs={'pk': self.user.pk}),
             reverse('album_add'),
             reverse('photo_add'),
+            reverse('photo_edit', kwargs={'pk': self.photo.pk}),
+            reverse('album_edit', kwargs={'pk': self.album.pk}),
+            reverse('profile_edit', kwargs={'pk': self.user.pk})
             ]
         for url in urls:
             response = self.client.get(url, follow=True)
@@ -206,23 +217,15 @@ class UrlAccessTestCase(TestCase):
     def test_auth_user_have_access_to_urls(self):
         """
         Prove that an auth user has access to '/profile/', '/library/',
-        and '/albums/'.
+        '/photos/', '/albums/'.
         """
+        self.client.force_login(user=self.user)
         urls = [
             reverse('profile_view'),
-            reverse('library'),
-            # reverse('photos', kwargs={'pk': 1}),
-            # reverse('albums', kwargs={'pk': 1}),
-            reverse('album_add'),
-            reverse('photo_add'),
+            # reverse('library'),
+            # reverse('photos', kwargs={'pk': self.photo.pk}),
+            reverse('albums', kwargs={'pk': self.album.pk}),
             ]
-        self.user = UserFactory()
-        self.user.save()
-        # self.photo1 = PhotoFactory(user=self.user)
-        # self.photo1.save()
-        self.album1 = Album(user=self.user)
-        self.album1.save()
-        self.client.force_login(user=self.user)
         for url in urls:
             response = self.client.get(url)
             self.assertEquals(response.status_code, 200)
