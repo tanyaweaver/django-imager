@@ -1,5 +1,6 @@
 # django-imager
-Python app in Django.  An assignment for Code 401 - Python.
+Python app in Django.  An assignment for Code 401 - Python (Code Fellows 2016)
+Developers: Tatiana Weaver, Victor Benevente
 
 ## Image Library is a Python application developed in Django.
 It features user's registration (with email activation link), login and logout.
