@@ -14,6 +14,8 @@ class ImagerProfile(models.Model):
         related_name="profile",
         on_delete=models.CASCADE
     )
+    first_name = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50, blank=True)
     camera_type = models.CharField(max_length=200, blank=True)
     address = models.CharField(max_length=200, blank=True)
     website = models.CharField(max_length=200, blank=True)

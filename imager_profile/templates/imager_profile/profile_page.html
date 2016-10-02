@@ -10,6 +10,11 @@
        <p><strong>You have uploaded</strong> {{ user.photos.count }} photos</p>
        <p><strong>You have</strong> {{ user.albums.count }} albums</p>
     </div>
+
+    <a href="{% url 'profile_edit' user.pk %}">
+      <input class="btn btn-primary" type="button" value="Edit Profile"/>
+    </a>
+
    <div class="msg">
      <h4>Go to you library to view and edit your photos and albums.</h4>
    </div>

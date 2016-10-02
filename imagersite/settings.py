@@ -16,19 +16,26 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'a!3n!xie47x**unfp5hdi_=nxmq%!4o9wym)ev=*$wqu=q=c@&'
+# SECRET_KEY = 'a!3n!xie47x**unfp5hdi_=nxmq%!4o9wym)ev=*$wqu=q=c@&'
 
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# REDIS_URL = os.environ.get("REDIS_URL")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+DEBUG = os.environ.get('DEBUG')
+
+
+# ALLOWED_HOSTS = []
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+# DEBUG = True
 
 # Application definition
 
@@ -159,6 +166,5 @@ STATICFILES_DIRS = [
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_REDIRECT_URL = '/'
