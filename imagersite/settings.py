@@ -26,10 +26,16 @@ MEDIA_URL = '/media/'
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+EMAIL_PORT = 25
+EMAIL_TLS = False
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # REDIS_URL = os.environ.get("REDIS_URL")
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = os.environ.get('DEBUG')
+DEBUG = os.environ.get('DEBUG', False)
 
 
 # ALLOWED_HOSTS = []
