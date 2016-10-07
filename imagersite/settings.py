@@ -33,7 +33,6 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# REDIS_URL = os.environ.get("REDIS_URL")
 SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get('DEBUG', False)
 
