@@ -6,7 +6,6 @@ from imager_images.models import Photo, Album
 from django.urls import reverse
 
 
-@python_2_unicode_compatible
 class LibraryView(TemplateView):
     """Establish class for the view for library page."""
     template_name = 'imager_images/library_page.html'
@@ -23,7 +22,6 @@ class LibraryView(TemplateView):
         return context
 
 
-@python_2_unicode_compatible
 class PhotoView(DetailView):
     """Establish class of view for photo page."""
     template_name = 'imager_images/photo_page.html'
@@ -40,7 +38,6 @@ class PhotoView(DetailView):
         return context
 
 
-@python_2_unicode_compatible
 class AlbumView(DetailView):
     """Establish class of view for album page."""
     template_name = 'imager_images/album_page.html'
@@ -57,7 +54,6 @@ class AlbumView(DetailView):
         return context
 
 
-@python_2_unicode_compatible
 class UploadPhotoView(CreateView):
     """Establish class of view for uploading photos."""
     template_name = 'imager_images/upload_photo_page.html'
@@ -75,7 +71,6 @@ class UploadPhotoView(CreateView):
         return super(UploadPhotoView, self).form_valid(form)
 
 
-@python_2_unicode_compatible
 class AddAlbumView(CreateView):
     """Establish class of view for adding albums."""
     template_name = 'imager_images/add_album_page.html'
@@ -100,7 +95,6 @@ class AddAlbumView(CreateView):
         return super(AddAlbumView, self).form_valid(form)
 
 
-@python_2_unicode_compatible
 class EditAlbumView(UpdateView):
     """Define edit album class."""
     template_name = 'imager_images/edit_album_page.html'
@@ -123,7 +117,6 @@ class EditAlbumView(UpdateView):
         return url
 
 
-@python_2_unicode_compatible
 class EditPhotoView(UpdateView):
     """Define edit photo class."""
     template_name = 'imager_images/edit_photo_page.html'

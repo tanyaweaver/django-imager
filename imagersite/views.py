@@ -3,7 +3,6 @@ from django.views.generic.base import TemplateView
 from imager_images.models import Photo
 
 
-@python_2_unicode_compatible
 class HomeView(TemplateView):
     template_name = 'imagersite/home.html'
 
