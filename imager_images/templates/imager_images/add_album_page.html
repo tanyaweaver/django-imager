@@ -1,0 +1,17 @@
+{% extends "imagersite/base.html" %}
+{% block body %}
+<main class="container-fluid portal-main">
+  <section class="row">
+    {% if form.errors %}
+      {{ form.errors }}
+    {% endif %}
+    <form action="" method="post" class="form-signin">
+    {% csrf_token %}
+
+      {{ form }}
+
+      <button class="btn btn-lg btn-success btn-block" type="submit">Add</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

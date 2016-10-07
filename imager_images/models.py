@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.contrib.auth.models import User
-# from imager_profile.models import ImagerProfile
 
 
 @python_2_unicode_compatible
@@ -72,7 +71,7 @@ class Album(models.Model):
 
     @property
     def cover(self):
-        return self.objects.filter(photo__is_cover=True)
+        return self.photos.filter(is_cover=True).first()
 
     def __str__(self):
         return 'Album for {}'.format(self.user)

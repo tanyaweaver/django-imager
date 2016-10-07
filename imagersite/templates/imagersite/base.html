@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ImagerSite</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  {% load static %}
+  <link type="text/css" rel="stylesheet" href="{% static "css/base.css" %}" charset="utf-8">
+</head>
+<header>
+  {% if user.is_authenticated %}
+  <div id="nav">
+    <a class="nav-link" href="{% url 'profile_view' %}">Welcome, {{ user.username }}</a>
+    <a class="nav-link" href="{% url 'library' %}">Library</a>
+    <a class="nav-link" href="{% url 'auth_logout' %}">Log Out</a>
+  </div>
+  {% endif %}
+</header>
+
+<body>
+  {% block body %} {% endblock %}
+</body>
+
+<footer>
+</footer>
+</html>

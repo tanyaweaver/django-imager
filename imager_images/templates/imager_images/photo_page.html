@@ -1,0 +1,14 @@
+{% extends "imagersite/base.html" %}
+{% block body %}
+<div class="meta">
+
+  <h4><strong>{{ photo.title }}</strong></h4>
+  <p><strong>Description:</strong> {{ photo.description }}</p>
+  <p><strong>Date uploaded:</strong> {{ photo.date_uploaded }},
+      <strong>Date modified:</strong> {{ photo.data_modified }},
+  <p><strong>Date published:</strong> {{ photo.date_published }}
+      <strong>Published:</strong> {{ status }}</p>
+
+  <img class="photo-view" src="{{ photo.photo.url }}">
+</div>
+{% endblock %}
